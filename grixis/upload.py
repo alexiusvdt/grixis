@@ -1,48 +1,47 @@
 import requests
 import asyncio
+import time
 
-def upload(api_key, access_token):
+async def upload(api_key, access_token):
     """
     construct params before passing request to endpoint
     creating a photo requires 3 separate calls:
     1) request url, returning an upload URL
     2) use upload url returned in 1 to upload photo bytes
     3) after photo uploaded, upload metadata
-    """    
-    resp = get_upload_url()
-    if resp == "<Response [200]>":
-        print("yay")
-    else:
-        print("ohr noer")
+    """
+    url = await get_upload_url(access_token, api_key)
+    await upload_photo_bytes(access_token, url, filepath)
+    await upload_metadata()
 
-def get_upload_url():
-    """get the upload url"""
-
+async def get_upload_url(access_token, api_key):
+    """sets headers & params, returns the upload url"""
+    
     headers = {
         'Authorization': f'Bearer {access_token}',
         'Content-Length': '0',
     }
-
-    params = {
-        'key': api_key,
-    }
-
-    upload_url = requests.post('https://streetviewpublish.googleapis.com/v1/photo:startUpload', params=params, headers=headers)
-    return upload_url
+    params = {'key': api_key}
+    try:
+        upload_url = requests.post('https://streetviewpublish.googleapis.com/v1/photo:startUpload', params=params, headers=headers)
+        return upload_url
+    except:
+        raise Exception("get upload URL FAILED")
     
-def upload_photo_bytes(upload_url, filepath):
+async def upload_photo_bytes(access_token, upload_url, filepath):
     """take upload url & send the photo bytes"""
 
-    headers = {
-        'Authorization': f'Bearer {access_token}',
-    }
+    headers = {'Authorization': f'Bearer {access_token}',}
+    try:
+        with open(filepath, 'rb') as f:
+            data = f.read()
 
-    with open(filepath, 'rb') as f:
-        data = f.read()
+        response = requests.post('http://UPLOAD_URL/PATH_TO_FILE', headers=headers, data=data)
+    except:
+        raise Exception("photobyte upload FAILED")
 
-    response = requests.post('http://UPLOAD_URL/PATH_TO_FILE', headers=headers, data=data)
 
-def upload_metadata():
+async def upload_metadata(access_token, api_key, upload_url):
     """slap that metadata up there"""
     
     headers = {
@@ -50,9 +49,7 @@ def upload_metadata():
         'Content-Type': 'application/json',
     }
 
-    params = {
-        'key': api_key,
-    }
+    params = {'key': api_key}
 
     data = {"uploadReference":
                 {
@@ -72,4 +69,8 @@ def upload_metadata():
                 "seconds": 1483202694
                 },
             }
-    metadata_response = requests.post('https://streetviewpublish.googleapis.com/v1/photo', params=params, headers=headers, data=data)
+    try:
+        metadata_response = requests.post('https://streetviewpublish.googleapis.com/v1/photo', params=params, headers=headers, data=data)
+    
+    except:
+        raise Exception("photobyte upload FAILED")

@@ -12,6 +12,7 @@ Your team goes out to walk a route & takes several 360 photos & needs the photos
     * User will be able to upload a batch of files at once
     * user will recieve notification when all files complete
     * authentication will be present (likely oauth)
+    * log file of timestamps & status generated
 
 # Installation
 
