@@ -1,6 +1,7 @@
 # codename: grixis
 
 # A tool to automate tedious uploads
+Your team goes out to walk a route & takes several 360 photos & needs the photos and associated metadata uploaded. Help them upload that data programatically.
 
 # User story
     * Users will be able to upload multiple files to the streetview api
