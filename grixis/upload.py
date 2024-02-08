@@ -1,4 +1,5 @@
 import requests
+import asyncio
 
 def upload(api_key, access_token):
     """
