@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { map, tileLayer, Browser } from 'leaflet';
 
-import './map.css';
+import './Map.css';
 
 const MyMap = ({
   mapIsReadyCallback /* To be triggered when a map object is created */,
