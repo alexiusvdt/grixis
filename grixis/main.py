@@ -15,7 +15,7 @@ def main():
       #
    # call upload script
    # cleanup & process next/close
-   upload(acc)
+   # upload(acc)
 
 if __name__ == "__main__":
    load_dotenv()
